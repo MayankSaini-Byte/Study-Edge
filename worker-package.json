@@ -1,0 +1,14 @@
+{
+    "name": "studyedge-api",
+    "version": "1.0.0",
+    "scripts": {
+        "dev": "wrangler dev",
+        "deploy": "wrangler deploy",
+        "migrate": "wrangler d1 execute studyedge-db --local --file=./migrations/schema.sql"
+    },
+    "devDependencies": {
+        "@cloudflare/workers-types": "^4.20240925.0",
+        "wrangler": "^3.0.0",
+        "typescript": "^5.0.0"
+    }
+}

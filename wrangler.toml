@@ -1,0 +1,11 @@
+name = "studyedge-api"
+main = "src/index.ts"
+compatibility_date = "2024-01-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "studyedge-db"
+database_id = "placeholder" # Will be replaced after creating D1 database
+
+[vars]
+ENVIRONMENT = "development"
