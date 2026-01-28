@@ -47,11 +47,13 @@ export const Assignments: React.FC = () => {
     const fetchAssignments = useCallback(async () => {
         setLoading(true);
         setErrorMsg(null);
-        const { data, error } = await api.getAssignments();
-        if (error) {
+        try {
+            const { data } = await api.getAssignments();
+            if (data) {
+                setAssignments(data.assignments as Assignment[]);
+            }
+        } catch (error) {
             setErrorMsg('Failed to load assignments. Please try again.');
-        } else if (data) {
-            setAssignments(data.assignments as Assignment[]);
         }
         setLoading(false);
     }, []);
@@ -77,21 +79,20 @@ export const Assignments: React.FC = () => {
         setSubmitting(true);
         setErrorMsg(null);
 
-        const { error } = await api.createAssignment(
-            newTitle.trim(),
-            newDueDate || undefined,
-            pdfFile || undefined
-        );
+        try {
+            await api.createAssignment(
+                newTitle.trim(),
+                newDueDate || undefined,
+                pdfFile || undefined
+            );
 
-        setSubmitting(false);
-
-        if (error) {
+            resetForm();
+            fetchAssignments();
+        } catch (error) {
             setErrorMsg('Could not create assignment.');
-            return;
+        } finally {
+            setSubmitting(false);
         }
-
-        resetForm();
-        fetchAssignments();
     };
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -121,8 +122,11 @@ export const Assignments: React.FC = () => {
             prev.map(a => (a.id === id ? { ...a, status: nextStatus } : a))
         );
 
-        const { error } = await api.updateAssignment(id, nextStatus);
-        if (error) fetchAssignments();
+        try {
+            await api.updateAssignment(id, nextStatus);
+        } catch (error) {
+            fetchAssignments();
+        }
     };
 
     const handleDeleteClick = (id: number) => {
@@ -138,8 +142,11 @@ export const Assignments: React.FC = () => {
         const snapshot = assignments;
         setAssignments(prev => prev.filter(a => a.id !== id));
 
-        const { error } = await api.deleteAssignment(id);
-        if (error) setAssignments(snapshot);
+        try {
+            await api.deleteAssignment(id);
+        } catch (error) {
+            setAssignments(snapshot);
+        }
     };
 
     // -----------------------------

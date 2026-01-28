@@ -28,7 +28,7 @@ export const api = {
 
 
     getAssignments: () => client.get('/assignments'),
-    createAssignment: (title: string, due_date?: string) => client.post('/assignments', { title, due_date }),
+    createAssignment: (title: string, due_date?: string, pdf_file?: string) => client.post('/assignments', { title, due_date, pdf_file }),
     updateAssignment: (id: number, status: string) => client.patch(`/assignments/${id}`, { status }),
     deleteAssignment: (id: number) => client.delete(`/assignments/${id}`),
 

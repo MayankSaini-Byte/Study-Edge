@@ -17,6 +17,12 @@ export const Welcome = () => {
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (scholarNo.length !== 11) {
+            setError("Scholar number must be exactly 11 digits");
+            return;
+        }
+
         setError('');
         setIsLoading(true);
 
@@ -25,8 +31,13 @@ export const Welcome = () => {
             // Success - navigate to dashboard
             navigate('/dashboard');
         } catch (err: any) {
-            const errorMessage = err.response?.data?.detail || "Login failed. Please check your details.";
-            setError(errorMessage);
+            console.error("Login error:", err);
+            if (!err.response) {
+                setError("Unable to connect to server. Please ensure the backend is running.");
+            } else {
+                const errorMessage = err.response?.data?.detail || "Login failed. Please check your details.";
+                setError(errorMessage);
+            }
         } finally {
             setIsLoading(false);
         }
