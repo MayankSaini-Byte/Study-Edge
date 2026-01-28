@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const client = axios.create({
-    baseURL: `http://${window.location.hostname}:8000`, // Dynamically connect to the backend on the same host
+    baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000', // Use env var or default to localhost
     withCredentials: true, // Important for HttpOnly cookies
     headers: {
         'Content-Type': 'application/json',
